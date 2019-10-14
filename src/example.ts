@@ -1,13 +1,18 @@
-import  DataBase from './';
+import DataBase from './';
+import seed from './seed/tablesUsersAndPosts';
 
 const db = new DataBase();
-db
-    .table("users")
-    .fields(["id", "name"])
-    .limit(1)
-    .skip(1)
-    .orderBy("desc")
-    .where({ id: 1, name: 2 })
-    .then((res) => {
-        console.log(res)
+
+seed().then(async () => {
+    const rows = await db
+        .table("users")
+        .where({
+            id: 1,
+            username: 'rs-hub'
+        })
+        .select(["id", "username"])
+        .limit(1)
+        .skip(1);
+
+    console.log(rows)
 });

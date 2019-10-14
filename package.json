@@ -15,5 +15,10 @@
       "api-docs/"
     ],
     "exec": "node --inspect -r ts-node/register ./src/example.ts"
+  },
+  "dependencies": {
+    "@types/pg": "^7.11.2",
+    "dotenv": "^8.1.0",
+    "pg": "^7.12.1"
   }
 }

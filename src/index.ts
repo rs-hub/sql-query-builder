@@ -1,10 +1,14 @@
-export default class DataBase {
+import * as pg from 'pg';
+
+export const pool = new pg.Pool();
+
+export default class DataBase  {
     private offset: number | undefined;
     private limitCount: number | undefined;
     private columns: string[] | undefined;
     private order: string | undefined;
     private conditions: {} | undefined;
-    private args: any[] | undefined;
+    private value: any[] | undefined;
     private byTable: string | undefined;
 
     public skip(name: number) {
@@ -17,7 +21,7 @@ export default class DataBase {
         return this;
     }
 
-    public fields(columns: string[]) {
+    public select(columns: string[]) {
         this.columns = columns;
         return this;
     }
@@ -33,19 +37,21 @@ export default class DataBase {
     }
 
     public where(conditions: {}) {
-        this.args = [];
+        this.value = [];
         this.conditions = Object.entries(conditions).reduce((prev, [value, key], i) => {
-            this.args.push(value);
+            this.value.push(key);
             return prev ? `${prev} AND ${`${value} = $${i + 1}`}` : `${value} = $${i + 1}`;
         }, "");
         return this;
     }
 
-    public then(callback: (res) => void) {
+    public async then(callback: (res) => void) {
         let sql = `SELECT ${this.columns} FROM ${this.byTable}`;
         if (this.conditions) { sql += ` WHERE ${this.conditions}`; }
         if (this.limitCount) { sql += ` LIMIT ${this.limitCount}`; }
         if (this.order) { sql += ` ORDER BY ${this.order}`; }
-        callback(sql);
+
+        const { rows } = await pool.query(sql, this.value);
+        callback(rows);
     }
 }
