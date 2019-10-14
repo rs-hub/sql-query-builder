@@ -1,0 +1,19 @@
+{
+  "name": "querybuilder",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "rs-hub",
+  "license": "ISC",
+  "nodemonConfig": {
+    "ext": "ts,tsx,yml",
+    "watch": [
+      "src/**/*",
+      "api-docs/"
+    ],
+    "exec": "node --inspect -r ts-node/register ./src/example.ts"
+  }
+}
