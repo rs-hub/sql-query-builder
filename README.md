@@ -27,3 +27,22 @@ Sql query builder for educational purposes
 
      console.log('insert user=>', rows[0].id, rows[0].username);
 ```
+
+**Create Table:**
+```js
+    const newTable = await db.createTable({
+        id: {
+            type: 'id',
+        },
+        comment: {
+            type: 'text',
+            constraints: ['notNull', 'unique']
+        },
+        userId: {
+            type: 'int',
+            constraints: ['notNull']
+        }
+    }).table('comments');
+
+    console.log('createTable');
+```
