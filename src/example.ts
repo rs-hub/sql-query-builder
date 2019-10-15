@@ -27,11 +27,19 @@ seed().then(async () => {
     console.log('insert user=>', rows[0].id, rows[0].username);
     */
 
-    const newTable = await db.createTable({
-        id: 'id',
-        comment: 'text',
-        userId: 'int'
-    }).table('comments');
-
-    console.log(newTable);
+    // const newTable = await db.createTable({
+    //     id: {
+    //         type: 'id',
+    //     },
+    //     comment: {
+    //         type: 'text',
+    //         constraints: ['notNull', 'unique']
+    //     },
+    //     userId: {
+    //         type: 'int',
+    //         constraints: ['notNull']
+    //     }
+    // }).table('comments');
+    //
+    // console.log('createTable');
 });
