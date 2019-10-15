@@ -18,11 +18,12 @@ Sql query builder for educational purposes
 
 **Insert:**
 ```js
-     const rows = await db
-          .insert({
-              username: 'michael',
-           })
-          .table('users');
+    const { rows }  = await db
+        .insert({
+            username: 'michael',
+        })
+        .table('users')
+        .returning(['id', 'username']);
 
-     console.log('insert user =>', rows.id, rows.username);
+     console.log('insert user=>', rows[0].id, rows[0].username);
 ```

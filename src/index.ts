@@ -6,6 +6,7 @@ class Insert {
     private byTable: string | undefined;
     private readonly key: {} | undefined;
     private readonly value: any[] | undefined;
+    private columns: string[] | undefined;
 
     constructor(data) {
         if (data) {
@@ -19,11 +20,19 @@ class Insert {
         return this
     }
 
+    public returning(columns: string[]){
+        this.columns = columns;
+        return this
+    }
     public async then(callback: (res) => void) {
         const values =  this.value.map((el, i) => `$${i + 1}`).join(', ');
-        let sql = `insert into ${this.byTable} (${this.key}) values (${values}) RETURNING id, username;`;
-        const { rows }  = await pool.query(sql, this.value);
-        callback(rows[0]);
+        let sql = `insert into ${this.byTable} (${this.key}) values (${values})`;
+        if (this.columns) {
+            sql += ` RETURNING ${this.columns.join(', ')}`;
+        }
+
+        const result  = await pool.query(sql, this.value);
+        callback(result);
     }
 }
 

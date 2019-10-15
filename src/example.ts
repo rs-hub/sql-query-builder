@@ -14,13 +14,13 @@ seed().then(async () => {
         .skip(1);
     console.log('select user =>', user[0].id, user[0].username);
 
-    /**
-     const rows = await db
-     .insert({
-            username: 'michael',
-        })
-     .table('users');
 
-     console.log('insert user=>', rows.id, rows.username);
-     */
+    // const { rows }  = await db
+    //     .insert({
+    //         username: 'michael',
+    //     })
+    //     .table('users')
+    //     .returning(['id', 'username']);
+    //
+    //  console.log('insert user=>', rows[0].id, rows[0].username);
 });
