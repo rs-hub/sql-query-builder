@@ -1,6 +1,30 @@
 import * as pg from 'pg';
+import Dialects from './Dialects'
 
 export const pool = new pg.Pool();
+
+class CreateTable extends Dialects {
+    private tableName: string | undefined;
+    private readonly columns :string;
+
+    constructor(data) {
+        super();
+        if (data) {
+            this.columns = this.buildColumns(data);
+        }
+    }
+
+    public table(tableName: string) {
+        this.tableName = tableName;
+        return this
+    }
+
+    public async then(callback: (res) => void) {
+        const sql = `CREATE TABLE ${this.tableName} (${this.columns});`;
+        const result = await pool.query(sql);
+        callback(result);
+    }
+}
 
 class Insert {
     private byTable: string | undefined;
@@ -20,18 +44,19 @@ class Insert {
         return this
     }
 
-    public returning(columns: string[]){
+    public returning(columns: string[]) {
         this.columns = columns;
         return this
     }
+
     public async then(callback: (res) => void) {
-        const values =  this.value.map((el, i) => `$${i + 1}`).join(', ');
+        const values = this.value.map((el, i) => `$${i + 1}`).join(', ');
         let sql = `insert into ${this.byTable} (${this.key}) values (${values})`;
         if (this.columns) {
             sql += ` RETURNING ${this.columns.join(', ')}`;
         }
 
-        const result  = await pool.query(sql, this.value);
+        const result = await pool.query(sql, this.value);
         callback(result);
     }
 }
@@ -54,6 +79,7 @@ class Select {
             }, "");
         }
     }
+
     public skip(name: number) {
         this.offset = name;
         return this;
@@ -98,7 +124,10 @@ class Select {
 
 interface dataBase {
     insert(value: object): Insert;
+
     select(value: object): Select;
+
+    createTable(value: object): CreateTable;
 }
 
 export default class DataBase implements dataBase {
@@ -108,5 +137,9 @@ export default class DataBase implements dataBase {
 
     select(value): Select {
         return new Select(value);
+    }
+
+    createTable(value): CreateTable {
+        return new CreateTable(value);
     }
 }
