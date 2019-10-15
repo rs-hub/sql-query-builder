@@ -4,7 +4,7 @@ const sqlCreateTable = `
     CREATE TABLE if not exists users
     (
         id       serial PRIMARY KEY,
-        username varchar(255)
+        username varchar(255) unique 
     );
     CREATE TABLE if not exists posts
     (

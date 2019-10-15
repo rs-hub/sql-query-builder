@@ -4,15 +4,23 @@ import seed from './seed/tablesUsersAndPosts';
 const db = new DataBase();
 
 seed().then(async () => {
-    const rows = await db
-        .table("users")
-        .where({
-            id: 1,
+    const user = await db
+        .select({
             username: 'rs-hub'
         })
-        .select(["id", "username"])
+        .table("users")
+        .column(["id", "username"])
         .limit(1)
         .skip(1);
+    console.log('select user =>', user[0].id, user[0].username);
 
-    console.log(rows)
+    /**
+     const rows = await db
+     .insert({
+            username: 'michael',
+        })
+     .table('users');
+
+     console.log('insert user=>', rows.id, rows.username);
+     */
 });
