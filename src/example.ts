@@ -14,7 +14,7 @@ seed().then(async () => {
         .limit(1)
         .skip(1);
     console.log('select user =>', user[0].id, user[0].username);
-    /*
+    */
 
     /**
     const { rows } = await db
