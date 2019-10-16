@@ -10,8 +10,8 @@ Sql query builder for educational purposes
         .table("users")
         .column(["id", "username"])
         .limit(1)
-        .skip(1);
-
+        .skip(1)
+        .query();
     console.log('select user =>', user[0].id, user[0].username);
 ```
 
@@ -24,7 +24,7 @@ Sql query builder for educational purposes
         })
         .table('users')
         .returning(['id', 'username']);
-
+        .query();
      console.log('insert user=>', rows[0].id, rows[0].username);
 ```
 
@@ -42,8 +42,9 @@ Sql query builder for educational purposes
             type: 'int',
             constraints: ['notNull']
         }
-    }).table('comments')
-      .ifNotExist();
-
+    })
+      .table('comments')
+      .ifNotExist()
+      .query();
     console.log('createTable');
 ```
