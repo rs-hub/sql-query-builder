@@ -48,3 +48,17 @@ Sql query builder for educational purposes
       .query();
     console.log('createTable');
 ```
+**Update:**
+```js
+    const update = await db
+        .update({
+            id: 6,
+            username: 'rs-hub'
+        })
+        .table('users')
+        .set({
+            username: 'rs-hub',
+        })
+        .query();
+    console.log(update);
+```

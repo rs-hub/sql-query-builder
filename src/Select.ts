@@ -1,4 +1,5 @@
 import { pool } from "./index";
+import Dialects from "./Dialects";
 
 interface select {
     skip(name: number): Select;
@@ -14,23 +15,20 @@ interface select {
 }
 
 
-export default class Select implements select{
+export default class Select extends Dialects implements select {
     private offset: number | undefined;
     private limitCount: number | undefined;
     private columns: string[] | undefined;
     private order: string | undefined;
     private readonly conditions: {} | undefined;
-    private readonly value: any[] | undefined;
+    private readonly values: any[] | undefined;
     private byTable: string | undefined;
 
-    constructor(conditions) {
-        if (conditions) {
-            this.value = [];
-            this.conditions = Object.entries(conditions).reduce((prev, [value, key], i) => {
-                this.value.push(key);
-                return prev ? `${prev} AND ${`${value} = $${i + 1}`}` : `${value} = $${i + 1}`;
-            }, "");
-        }
+    constructor(data) {
+        super();
+        const { values, conditions} = this.buildWhere(data);
+        this.values = values;
+        this.conditions = conditions;
     }
 
     public skip(name: number) {
@@ -72,7 +70,7 @@ export default class Select implements select{
 
         return {
             sql,
-            value: this.value
+            value: this.values
         };
     }
 

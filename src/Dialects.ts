@@ -1,6 +1,10 @@
 interface dialects {
     buildConstraints(constraints: string[]): String;
     buildColumns(data: object): String;
+    buildWhere(conditions: object): {
+        conditions: string,
+        values: any[]
+    };
 }
 
 export default class Dialects implements dialects {
@@ -29,6 +33,18 @@ export default class Dialects implements dialects {
             };
             return constraint
         }).join(' ') : '';
+    }
+
+    public buildWhere(data: object) {
+            let values = [];
+            const conditions = Object.entries(data).reduce((prev, [value, key], i) => {
+                values.push(key);
+                return prev ? `${prev} AND ${`${value} = $${i + 1}`}` : `${value} = $${i + 1}`;
+            }, "");
+            return {
+                conditions,
+                values
+            }
     }
 
     public buildColumns(data: object) {

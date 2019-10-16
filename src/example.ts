@@ -5,18 +5,18 @@ const db = new DataBase();
 
 seed().then(async () => {
     /**
-    const { rows: user } = await db
-        .select({
+     const { rows: user } = await db
+     .select({
             username: 'rs-hub'
         })
-        .table("users")
-        .column(["id", "username"])
-        .limit(1)
-        .skip(1)
-        .query();
+     .table("users")
+     .column(["id", "username"])
+     .limit(1)
+     .skip(1)
+     .query();
 
-    console.log('select user =>', user[0].id, user[0].username);
-    */
+     console.log('select user =>', user[0].id, user[0].username);
+     */
 
     /**
      const { rows } = await db
@@ -50,4 +50,18 @@ seed().then(async () => {
      console.log(newTable);
      */
 
+
+    /**
+    const update = await db
+        .update({
+            id: 6,
+            username: 'rs-hub'
+        })
+        .table('users')
+        .set({
+            username: 'rs-hub',
+        })
+        .query();
+    console.log(update);
+     */
 });

@@ -13,12 +13,12 @@ interface insert {
 export default class Insert implements insert{
     private byTable: string | undefined;
     private readonly key: {} | undefined;
-    private readonly value: any[] | undefined;
+    private readonly values: any[] | undefined;
     private columns: string[] | undefined;
 
     constructor(data) {
         if (data) {
-            this.value = Object.values(data);
+            this.values = Object.values(data);
             this.key = Object.keys(data);
         }
     }
@@ -39,7 +39,7 @@ export default class Insert implements insert{
     }
 
     public generate() {
-        const values = this.value.map((el, i) => `$${i + 1}`).join(', ');
+        const values = this.values.map((el, i) => `$${i + 1}`).join(', ');
         let sql = `insert into ${this.byTable} (${this.key}) values (${values})`;
         if (this.columns) {
             sql += ` RETURNING ${this.columns.join(', ')}`;
@@ -47,7 +47,7 @@ export default class Insert implements insert{
 
         return {
             sql,
-            value: this.value
+            value: this.values
         };
     }
 }
