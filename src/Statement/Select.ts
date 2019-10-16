@@ -1,5 +1,4 @@
-import { pool } from "./index";
-import Dialects from "./Dialects";
+import Dialects from "../Dialects";
 
 interface select {
     skip(name: number): Select;
@@ -76,6 +75,6 @@ export default class Select extends Dialects implements select {
 
     public query() {
         const { sql, value } = this.generate();
-        return pool.query(sql, value);
+        return this.pool.query(sql, value);
     }
 }

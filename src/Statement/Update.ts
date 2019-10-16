@@ -1,5 +1,4 @@
-import { pool } from "./index";
-import Dialects from "./Dialects";
+import Dialects from "../Dialects";
 
 interface update {
     table(table: string): Update;
@@ -53,6 +52,6 @@ export default class Update extends Dialects implements update {
 
     public query() {
         const { sql, value } = this.generate();
-        return pool.query(sql, value);
+        return this.pool.query(sql, value);
     }
 }

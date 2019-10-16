@@ -1,5 +1,4 @@
-import Dialects from "./Dialects";
-import { pool } from "./index";
+import Dialects from "../Dialects";
 
 interface createTable {
     table(value: string): CreateTable;
@@ -49,7 +48,7 @@ export default class CreateTable extends Dialects implements createTable{
 
     public query() {
         const { sql } = this.generate();
-        return pool.query(sql);
+        return this.pool.query(sql);
     }
 
 }

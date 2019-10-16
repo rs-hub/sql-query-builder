@@ -1,3 +1,6 @@
+import DataBase from "./index";
+import * as pg from "pg";
+
 interface dialects {
     buildConstraints(constraints: string[]): String;
     buildColumns(data: object): String;
@@ -8,6 +11,11 @@ interface dialects {
 }
 
 export default class Dialects implements dialects {
+    public pool: pg.Pool;
+    constructor() {
+        this.pool = DataBase.getPool();
+    }
+
     public dataType = {
         id: 'serial PRIMARY KEY',
         int: 'int',

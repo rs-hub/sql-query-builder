@@ -1,4 +1,4 @@
-import { pool } from "./index";
+import Dialects from "../Dialects";
 
 interface insert {
     table(table: string): Insert;
@@ -10,13 +10,14 @@ interface insert {
     query(): Promise<any>
 }
 
-export default class Insert implements insert{
+export default class Insert extends Dialects implements insert{
     private byTable: string | undefined;
     private readonly key: {} | undefined;
     private readonly values: any[] | undefined;
     private columns: string[] | undefined;
 
     constructor(data) {
+        super();
         if (data) {
             this.values = Object.values(data);
             this.key = Object.keys(data);
@@ -35,7 +36,7 @@ export default class Insert implements insert{
 
     public query() {
         const { sql, value } = this.generate();
-        return pool.query(sql, value);
+        return this.pool.query(sql, value);
     }
 
     public generate() {

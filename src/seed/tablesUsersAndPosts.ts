@@ -1,4 +1,4 @@
-import { pool } from '../index';
+import DataBase from '../index';
 
 const sqlCreateTable = `
     CREATE TABLE if not exists users
@@ -19,6 +19,6 @@ const sqlInsertUSer = `INSERT INTO users (username)
                                SELECT username FROM users WHERE username = 'rs-hub'
                            );`;
 export default async () => {
-    await pool.query(sqlCreateTable);
-    await pool.query(sqlInsertUSer);
+    await DataBase.getPool().query(sqlCreateTable);
+    await DataBase.getPool().query(sqlInsertUSer);
 };

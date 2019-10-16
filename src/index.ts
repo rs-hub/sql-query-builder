@@ -1,35 +1,18 @@
 import * as pg from 'pg';
-import Insert from './Insert';
-import Select from './Select';
-import CreateTable from './CreateTable';
-import Update from './Update';
+import Statement from './Statement';
 
-export const pool = new pg.Pool();
+export default class DataBase extends Statement {
+    public static pool: pg.Pool;
 
-interface dataBase {
-    insert(value: object): Insert;
+    constructor (config?: pg.PoolConfig) {
+        super();
+        DataBase.getPool(config);
+    };
 
-    select(conditions: object): Select;
-
-    createTable(value: object): CreateTable;
-
-    update(conditions: object): Update;
-}
-
-export default class DataBase implements dataBase {
-    insert(value): Insert {
-        return new Insert(value);
-    }
-
-    select(conditions): Select {
-        return new Select(conditions);
-    }
-
-    createTable(value): CreateTable {
-        return new CreateTable(value);
-    }
-
-    update(conditions): Update {
-        return new Update(conditions);
+    public static getPool(config?: pg.PoolConfig): pg.Pool {
+        if (!DataBase.pool) {
+            DataBase.pool= new pg.Pool(config);
+        }
+        return DataBase.pool;
     }
 }
