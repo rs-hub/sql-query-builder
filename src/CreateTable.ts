@@ -1,7 +1,16 @@
 import Dialects from "./Dialects";
 import { pool } from "./index";
 
-export default class CreateTable extends Dialects {
+interface createTable {
+    table(value: string): CreateTable;
+    ifNotExist(): CreateTable;
+    generate(): {
+        sql: string
+    };
+    query(): Promise<any>
+}
+
+export default class CreateTable extends Dialects implements createTable{
     private tableName: string | undefined;
     private readonly columns :string;
     private isIfNotExist: boolean | undefined;
@@ -22,7 +31,8 @@ export default class CreateTable extends Dialects {
         this.isIfNotExist = true;
         return this
     }
-    public async then(callback: (res) => void) {
+
+    public generate() {
         let sql = 'CREATE TABLE';
         if(this.isIfNotExist){
             sql += ` ${this.constraints['ifNotExist']}`;
@@ -34,7 +44,12 @@ export default class CreateTable extends Dialects {
             sql += ` (${this.columns})`
         }
 
-        const result = await pool.query(sql);
-        callback(result);
+        return { sql };
     }
+
+    public query() {
+        const { sql } = this.generate();
+        return pool.query(sql);
+    }
+
 }

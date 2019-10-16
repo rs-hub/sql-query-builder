@@ -1,6 +1,20 @@
 import { pool } from "./index";
 
-export default class Select {
+interface select {
+    skip(name: number): Select;
+    limit(count: number): Select;
+    column(columns: string[]): Select;
+    orderBy(order: string): Select;
+    table(table: string):Select;
+    generate(): {
+        sql: string
+        value: any[]
+    };
+    query(): Promise<any>
+}
+
+
+export default class Select implements select{
     private offset: number | undefined;
     private limitCount: number | undefined;
     private columns: string[] | undefined;
@@ -44,7 +58,7 @@ export default class Select {
         return this
     }
 
-    public async then(callback: (res) => void) {
+    public generate() {
         let sql = `SELECT ${this.columns} FROM ${this.byTable}`;
         if (this.conditions) {
             sql += ` WHERE ${this.conditions}`;
@@ -56,7 +70,14 @@ export default class Select {
             sql += ` ORDER BY ${this.order}`;
         }
 
-        const { rows } = await pool.query(sql, this.value);
-        callback(rows);
+        return {
+            sql,
+            value: this.value
+        };
+    }
+
+    public query() {
+        const { sql, value } = this.generate();
+        return pool.query(sql, value);
     }
 }

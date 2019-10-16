@@ -1,4 +1,9 @@
-export default class Dialects {
+interface dialects {
+    buildConstraints(constraints: string[]): String;
+    buildColumns(data: object): String;
+}
+
+export default class Dialects implements dialects {
     public dataType = {
         id: 'serial PRIMARY KEY',
         int: 'int',

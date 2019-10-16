@@ -1,7 +1,16 @@
 import { pool } from "./index";
 
-export default
-class Insert {
+interface insert {
+    table(table: string): Insert;
+    returning(columns: string[]): Insert;
+    generate(): {
+        sql: string
+        value: any[]
+    };
+    query(): Promise<any>
+}
+
+export default class Insert implements insert{
     private byTable: string | undefined;
     private readonly key: {} | undefined;
     private readonly value: any[] | undefined;
@@ -24,14 +33,21 @@ class Insert {
         return this
     }
 
-    public async then(callback: (res) => void) {
+    public query() {
+        const { sql, value } = this.generate();
+        return pool.query(sql, value);
+    }
+
+    public generate() {
         const values = this.value.map((el, i) => `$${i + 1}`).join(', ');
         let sql = `insert into ${this.byTable} (${this.key}) values (${values})`;
         if (this.columns) {
             sql += ` RETURNING ${this.columns.join(', ')}`;
         }
 
-        const result = await pool.query(sql, this.value);
-        callback(result);
+        return {
+            sql,
+            value: this.value
+        };
     }
 }
