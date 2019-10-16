@@ -42,7 +42,8 @@ Sql query builder for educational purposes
             type: 'int',
             constraints: ['notNull']
         }
-    }).table('comments');
+    }).table('comments')
+      .ifNotExist();
 
     console.log('createTable');
 ```
