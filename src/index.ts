@@ -6,6 +6,7 @@ export const pool = new pg.Pool();
 class CreateTable extends Dialects {
     private tableName: string | undefined;
     private readonly columns :string;
+    private isIfNotExist: boolean | undefined;
 
     constructor(data) {
         super();
@@ -19,8 +20,22 @@ class CreateTable extends Dialects {
         return this
     }
 
+    public ifNotExist() {
+        this.isIfNotExist = true;
+        return this
+    }
     public async then(callback: (res) => void) {
-        const sql = `CREATE TABLE ${this.tableName} (${this.columns});`;
+        let sql = 'CREATE TABLE';
+        if(this.isIfNotExist){
+            sql += ` ${this.constraints['ifNotExist']}`;
+        }
+        if(this.tableName) {
+            sql += ` ${this.tableName}`
+        }
+        if(this.columns) {
+            sql += ` (${this.columns})`
+        }
+
         const result = await pool.query(sql);
         callback(result);
     }
