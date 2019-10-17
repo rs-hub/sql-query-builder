@@ -7,7 +7,7 @@ interface select {
     orderBy(order: string): Select;
     table(table: string):Select;
     generate(): { sql: string; value: any[] };
-    innerJoin(tableAndConditions: { table: string; condition: string }): any
+    innerJoin(tableAndConditions: { tables: string[]; conditions: string[] }): any
     query(): Promise<any>
 }
 
@@ -20,12 +20,11 @@ export default class Select extends Dialects implements select {
     private readonly conditions: {} | undefined;
     private readonly values: any[] | undefined;
     private byTable: string | undefined;
-    private joinTable: string | undefined;
-    private joinCondition: string | undefined;
+    private join: string | undefined;
 
     constructor(data) {
         super();
-        const { values, conditions} = this.buildWhere(data);
+        const { values, conditions } = this.buildWhere(data);
         this.values = values;
         this.conditions = conditions;
     }
@@ -55,15 +54,15 @@ export default class Select extends Dialects implements select {
         return this
     }
 
-    public innerJoin({ table, condition }: { table: string; condition: string }) {
-        this.joinTable = table;
-        this.joinCondition = condition;
+    public innerJoin(data: { tables: string[]; conditions: string[] }) {
+        this.join = this.buildJoinCondition(data);
         return this
     }
+
     public generate() {
         let sql = `SELECT ${this.columns} FROM ${this.byTable}`;
-        if (this.joinTable) {
-            sql += ` INNER JOIN ${this.joinTable} ON ${this.joinCondition}`;
+        if (this.join) {
+            sql += ` ${this.join}`;
         }
         if (this.conditions) {
             sql += ` WHERE ${this.conditions}`;

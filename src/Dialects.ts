@@ -55,6 +55,12 @@ export default class Dialects implements dialects {
             }
     }
 
+    public buildJoinCondition({ tables, conditions }: { tables: string[], conditions: string[]}) {
+        return tables.map((el, i) => {
+            return `INNER JOIN ${el} ON (${conditions[i]})`
+        }).join(' ');
+    }
+
     public buildColumns(data: object) {
         let columnsTypes = Object.values(data).map(el => {
             const type = this.dataType[`${el.type}`];

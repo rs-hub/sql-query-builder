@@ -15,7 +15,7 @@ seed().then(async () => {
      .skip(1)
      .query();
 
-     console.log('select user =>', user[0].id, user[0].username);
+     console.log(user); // [ { id: 8, username: 'rs-hub' } ]
      */
 
     /**
@@ -27,7 +27,7 @@ seed().then(async () => {
      .returning(['id', 'username'])
      .query();
 
-     console.log('insert user=>', rows[0].id, rows[0].username);
+     console.log(rows); // [ { id: 12, username: 'michael' } ]
      */
 
     /**
@@ -80,5 +80,22 @@ seed().then(async () => {
      .skip(1)
      .query();
      console.log(posts);
+     */
+
+    /**
+     const { rows } = await db
+     .select({
+            username: 'rs-hub'
+        })
+     .table("users")
+     .column(["users.id as userId", "posts.id as postId", "posts.text as postsText", "comments.comment"])
+     .innerJoin({
+            tables: ['posts', 'comments'],
+            conditions: ['users.id = posts.userid', 'comments.postsid = posts.id']
+        })
+     .limit(1)
+     .skip(1)
+     .query();
+     console.log(rows) // [ { userid: 8, postid: 1, poststext: 'hello', comment: 'Good' } ];
      */
 });

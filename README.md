@@ -3,7 +3,7 @@ Sql query builder for educational purposes
 
 **Select:**
 ```js
-   const user = await db
+    const { rows: user } = await db
         .select({
             username: 'rs-hub'
         })
@@ -12,19 +12,21 @@ Sql query builder for educational purposes
         .limit(1)
         .skip(1)
         .query();
-    console.log('select user =>', user[0].id, user[0].username);
+
+    console.log(user); // [ { id: 8, username: 'rs-hub' } ]
 ```
 
 **Insert:**
 ```js
-    const { rows }  = await db
-        .insert({
-            username: 'michael',
-        })
-        .table('users')
-        .returning(['id', 'username']);
-        .query();
-     console.log('insert user=>', rows[0].id, rows[0].username);
+     const { rows } = await db
+         .insert({
+                username: 'michael',
+            })
+         .table('users')
+         .returning(['id', 'username'])
+         .query();
+
+     console.log(rows); // [ { id: 12, username: 'michael' } ]
 ```
 
 **Create Table:**
@@ -65,18 +67,18 @@ Sql query builder for educational purposes
 
 **Join:**
 ```js
-    const { rows: posts } = await db
-        .select({
-            username: 'rs-hub'
-        })
-        .table("users")
-        .column(["users.id as userId", "posts.id as postId", "posts.text as postsText"])
-        .innerJoin({
-            table: 'posts',
-            condition: 'users.id = posts.userid'
-        })
-        .limit(1)
-        .skip(1)
-        .query();
-    console.log(posts);
+     const { rows } = await db
+         .select({
+                username: 'rs-hub'
+            })
+         .table("users")
+         .column(["users.id as userId", "posts.id as postId", "posts.text as postsText", "comments.comment"])
+         .innerJoin({
+                tables: ['posts', 'comments'],
+                conditions: ['users.id = posts.userid', 'comments.postsid = posts.id']
+            })
+         .limit(1)
+         .skip(1)
+         .query();
+         console.log(rows) // [ { userid: 8, postid: 1, poststext: 'hello', comment: 'Good' } ];
 ```
