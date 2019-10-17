@@ -52,16 +52,33 @@ seed().then(async () => {
 
 
     /**
-    const update = await db
-        .update({
+     const update = await db
+     .update({
             id: 6,
             username: 'rs-hub'
         })
-        .table('users')
-        .set({
+     .table('users')
+     .set({
             username: 'rs-hub',
         })
-        .query();
-    console.log(update);
+     .query();
+     console.log(update);
+     */
+
+    /**
+     const { rows: posts } = await db
+     .select({
+            username: 'rs-hub'
+        })
+     .table("users")
+     .column(["users.id as userId", "posts.id as postId", "posts.text as postsText"])
+     .innerJoin({
+            table: 'posts',
+            condition: 'users.id = posts.userid'
+        })
+     .limit(1)
+     .skip(1)
+     .query();
+     console.log(posts);
      */
 });

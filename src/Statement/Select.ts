@@ -6,10 +6,8 @@ interface select {
     column(columns: string[]): Select;
     orderBy(order: string): Select;
     table(table: string):Select;
-    generate(): {
-        sql: string
-        value: any[]
-    };
+    generate(): { sql: string; value: any[] };
+    innerJoin(tableAndConditions: { table: string; condition: string }): any
     query(): Promise<any>
 }
 
@@ -22,6 +20,8 @@ export default class Select extends Dialects implements select {
     private readonly conditions: {} | undefined;
     private readonly values: any[] | undefined;
     private byTable: string | undefined;
+    private joinTable: string | undefined;
+    private joinCondition: string | undefined;
 
     constructor(data) {
         super();
@@ -55,8 +55,16 @@ export default class Select extends Dialects implements select {
         return this
     }
 
+    public innerJoin({ table, condition }: { table: string; condition: string }) {
+        this.joinTable = table;
+        this.joinCondition = condition;
+        return this
+    }
     public generate() {
         let sql = `SELECT ${this.columns} FROM ${this.byTable}`;
+        if (this.joinTable) {
+            sql += ` INNER JOIN ${this.joinTable} ON ${this.joinCondition}`;
+        }
         if (this.conditions) {
             sql += ` WHERE ${this.conditions}`;
         }

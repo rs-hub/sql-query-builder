@@ -15,7 +15,6 @@ Sql query builder for educational purposes
     console.log('select user =>', user[0].id, user[0].username);
 ```
 
-
 **Insert:**
 ```js
     const { rows }  = await db
@@ -48,6 +47,7 @@ Sql query builder for educational purposes
       .query();
     console.log('createTable');
 ```
+
 **Update:**
 ```js
     const update = await db
@@ -61,4 +61,22 @@ Sql query builder for educational purposes
         })
         .query();
     console.log(update);
+```
+
+**Join:**
+```js
+    const { rows: posts } = await db
+        .select({
+            username: 'rs-hub'
+        })
+        .table("users")
+        .column(["users.id as userId", "posts.id as postId", "posts.text as postsText"])
+        .innerJoin({
+            table: 'posts',
+            condition: 'users.id = posts.userid'
+        })
+        .limit(1)
+        .skip(1)
+        .query();
+    console.log(posts);
 ```
