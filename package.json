@@ -4,7 +4,9 @@
   "description": "Sql query builder for pg for educational purposes",
   "main": "./src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "tslint": "tslint -c tslint.json -p tsconfig.json",
+    "tslint-fix": "tslint --fix -c tslint.json -p tsconfig.json",
+    "test": "mocha -r ts-node/register  --watch tests/**/*.test.ts"
   },
   "readmeFilename": "README.md",
   "repository": {
@@ -28,8 +30,20 @@
     "exec": "node --inspect -r ts-node/register ./src/example.ts"
   },
   "dependencies": {
+    "@types/chai": "^4.2.3",
     "@types/pg": "^7.11.2",
+    "chai": "^4.2.0",
     "dotenv": "^8.1.0",
+    "husky": "^3.0.9",
     "pg": "^7.12.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run tslint && npm run test"
+    }
+  },
+  "devDependencies": {
+    "@types/mocha": "^5.2.7",
+    "mocha": "^6.2.1"
   }
 }

@@ -35,8 +35,8 @@ export default class Insert extends Dialects implements insert{
     }
 
     public query() {
-        const { sql, value } = this.generate();
-        return this.pool.query(sql, value);
+        const { sql, values } = this.generate();
+        return this.pool.query(sql, values);
     }
 
     public generate() {

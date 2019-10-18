@@ -70,6 +70,9 @@ export default class Select extends Dialects implements select {
         if (this.limitCount) {
             sql += ` LIMIT ${this.limitCount}`;
         }
+        if (this.offset) {
+            sql += ` OFFSET ${this.offset}`;
+        }
         if (this.order) {
             sql += ` ORDER BY ${this.order}`;
         }
@@ -81,7 +84,7 @@ export default class Select extends Dialects implements select {
     }
 
     public query() {
-        const { sql, value } = this.generate();
-        return this.pool.query(sql, value);
+        const { sql, values } = this.generate();
+        return this.pool.query(sql, values);
     }
 }

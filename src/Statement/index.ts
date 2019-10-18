@@ -6,9 +6,9 @@ import Update from "./Update";
 interface index {
     insert(value: object): Insert;
 
-    select(conditions: object): Select;
+    select(conditions: { }): Select;
 
-    createTable(value: object): CreateTable;
+    createTable(columns: object): CreateTable;
 
     update(conditions: object): Update;
 }
@@ -22,8 +22,8 @@ export default class Statement implements index {
         return new Select(conditions);
     }
 
-    public createTable(value): CreateTable {
-        return new CreateTable(value);
+    public createTable(columns): CreateTable {
+        return new CreateTable(columns);
     }
 
     public update(conditions): Update {

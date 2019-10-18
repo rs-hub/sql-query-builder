@@ -51,7 +51,7 @@ export default class Update extends Dialects implements update {
     }
 
     public query() {
-        const { sql, value } = this.generate();
-        return this.pool.query(sql, value);
+        const { sql, values } = this.generate();
+        return this.pool.query(sql, values);
     }
 }
