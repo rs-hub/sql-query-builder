@@ -1,9 +1,9 @@
+import CreateTable from "./CreateTable";
 import Insert from "./Insert";
 import Select from "./Select";
-import CreateTable from "./CreateTable";
 import Update from "./Update";
 
-interface index {
+interface IStatement {
     insert(value: object): Insert;
 
     select(conditions: { }): Select;
@@ -13,7 +13,7 @@ interface index {
     update(conditions: object): Update;
 }
 
-export default class Statement implements index {
+export default class Statement implements IStatement {
     public insert(value): Insert {
         return new Insert(value);
     }

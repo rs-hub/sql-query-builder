@@ -1,17 +1,17 @@
 import Dialects from "../Dialects";
 
-interface createTable {
+interface ICreateTable {
     table(value: string): CreateTable;
     ifNotExist(): CreateTable;
     generate(): {
-        sql: string
+        sql: string,
     };
-    query(): Promise<any>
+    query(): Promise<any>;
 }
 
-export default class CreateTable extends Dialects implements createTable{
+export default class CreateTable extends Dialects implements ICreateTable {
     private tableName: string | undefined;
-    private readonly columns :string;
+    private readonly columns: string;
     private isIfNotExist: boolean | undefined;
 
     constructor(data) {
@@ -23,24 +23,24 @@ export default class CreateTable extends Dialects implements createTable{
 
     public table(tableName: string) {
         this.tableName = tableName;
-        return this
+        return this;
     }
 
     public ifNotExist() {
         this.isIfNotExist = true;
-        return this
+        return this;
     }
 
     public generate() {
-        let sql = 'CREATE TABLE';
-        if(this.isIfNotExist){
-            sql += ` ${this.constraints['ifNotExist']}`;
+        let sql = "CREATE TABLE";
+        if (this.isIfNotExist) {
+            sql += ` ${this.constraints.ifNotExist}`;
         }
-        if(this.tableName) {
-            sql += ` ${this.tableName}`
+        if (this.tableName) {
+            sql += ` ${this.tableName}`;
         }
-        if(this.columns) {
-            sql += ` (${this.columns})`
+        if (this.columns) {
+            sql += ` (${this.columns})`;
         }
 
         return { sql };

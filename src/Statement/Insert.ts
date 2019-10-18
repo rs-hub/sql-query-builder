@@ -1,16 +1,16 @@
 import Dialects from "../Dialects";
 
-interface insert {
+interface IInsert {
     table(table: string): Insert;
     returning(columns: string[]): Insert;
     generate(): {
         sql: string
-        value: any[]
+        values: any[],
     };
-    query(): Promise<any>
+    query(): Promise<any>;
 }
 
-export default class Insert extends Dialects implements insert{
+export default class Insert extends Dialects implements IInsert {
     private byTable: string | undefined;
     private readonly key: {} | undefined;
     private readonly values: any[] | undefined;
@@ -26,12 +26,12 @@ export default class Insert extends Dialects implements insert{
 
     public table(table: string) {
         this.byTable = table;
-        return this
+        return this;
     }
 
     public returning(columns: string[]) {
         this.columns = columns;
-        return this
+        return this;
     }
 
     public query() {
@@ -40,15 +40,15 @@ export default class Insert extends Dialects implements insert{
     }
 
     public generate() {
-        const values = this.values.map((el, i) => `$${i + 1}`).join(', ');
+        const values = this.values.map((el, i) => `$${i + 1}`).join(", ");
         let sql = `insert into ${this.byTable} (${this.key}) values (${values})`;
         if (this.columns) {
-            sql += ` RETURNING ${this.columns.join(', ')}`;
+            sql += ` RETURNING ${this.columns.join(", ")}`;
         }
 
         return {
             sql,
-            value: this.values
+            values: this.values,
         };
     }
 }

@@ -1,18 +1,17 @@
 import Dialects from "../Dialects";
 
-interface select {
+interface ISelect {
     skip(name: number): Select;
     limit(count: number): Select;
     column(columns: string[]): Select;
     orderBy(order: string): Select;
-    table(table: string):Select;
-    generate(): { sql: string; value: any[] };
-    innerJoin(tableAndConditions: { tables: string[]; conditions: string[] }): any
-    query(): Promise<any>
+    table(table: string): Select;
+    generate(): { sql: string; values: any[] };
+    innerJoin(tableAndConditions: { tables: string[]; conditions: string[] }): any;
+    query(): Promise<any>;
 }
 
-
-export default class Select extends Dialects implements select {
+export default class Select extends Dialects implements ISelect {
     private offset: number | undefined;
     private limitCount: number | undefined;
     private columns: string[] | undefined;
@@ -51,12 +50,12 @@ export default class Select extends Dialects implements select {
 
     public table(table: string) {
         this.byTable = table;
-        return this
+        return this;
     }
 
     public innerJoin(data: { tables: string[]; conditions: string[] }) {
         this.join = this.buildJoinCondition(data);
-        return this
+        return this;
     }
 
     public generate() {
@@ -79,7 +78,7 @@ export default class Select extends Dialects implements select {
 
         return {
             sql,
-            value: this.values
+            values: this.values,
         };
     }
 
