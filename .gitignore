@@ -19,3 +19,4 @@ dist/**/*
 error.log
 yarn-error.log
 uploads
+example.ts

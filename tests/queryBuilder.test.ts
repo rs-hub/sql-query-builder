@@ -115,4 +115,26 @@ describe("Generate create table query", async () => {
 
         expect(sql).to.eql("CREATE TABLE if not exists comments (id serial PRIMARY KEY , comment text NOT NULL unique, userId int NOT NULL)");
     });
+    it("methods references", async () => {
+        const { sql } = db.createTable(
+            {
+                id: {
+                    type: "id",
+                },
+                userId: {
+                    type: "int",
+                    constraints: ["notNull"],
+                    references: {
+                        table: 'users',
+                        field: 'id',
+                        method: 'onDeleteCascade',
+                    }
+                },
+            })
+            .table("posts")
+            .ifNotExist()
+            .generate();
+
+        expect(sql).to.eql("CREATE TABLE if not exists posts (id serial PRIMARY KEY , userId int NOT NULL references users (id) on delete cascade)");
+    });
 });

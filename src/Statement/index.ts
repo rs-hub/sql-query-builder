@@ -8,7 +8,13 @@ interface IStatement {
 
     select(conditions: { }): Select;
 
-    createTable(columns: object): CreateTable;
+    createTable(columns: {
+        references?: {
+            table: string
+            field: string
+            method: string,
+        },
+    }): CreateTable;
 
     update(conditions: object): Update;
 }
