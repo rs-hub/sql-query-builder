@@ -41,7 +41,12 @@ Sql query builder for educational purposes
         },
         userId: {
             type: 'int',
-            constraints: ['notNull']
+            constraints: ['notNull'],
+            references: {
+                table: 'users',
+                field: 'id',
+                method: 'onDeleteCascade',
+            }
         }
     })
       .table('comments')
