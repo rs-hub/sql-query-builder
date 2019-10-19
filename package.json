@@ -1,12 +1,14 @@
 {
   "name": "sql-qb",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Sql query builder for pg for educational purposes",
-  "main": "./src/index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "tslint": "tslint -c tslint.json -p tsconfig.json",
-    "tslint-fix": "tslint --fix -c tslint.json -p tsconfig.json",
-    "test": "mocha -r ts-node/register  --watch tests/**/*.test.ts"
+    "tslint:fix": "tslint --fix -c tslint.json -p tsconfig.json",
+    "test": "mocha -r ts-node/register tests/**/*.test.ts",
+    "build": "tsc"
   },
   "readmeFilename": "README.md",
   "repository": {
@@ -30,20 +32,20 @@
     "exec": "node --inspect -r ts-node/register ./src/example.ts"
   },
   "dependencies": {
-    "@types/chai": "^4.2.3",
-    "@types/pg": "^7.11.2",
-    "chai": "^4.2.0",
     "dotenv": "^8.1.0",
-    "husky": "^3.0.9",
     "pg": "^7.12.1"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run tslint-fix && npm run tslint && npm run test"
+      "pre-commit": "npm run tslint:fix && npm run tslint && npm run test"
     }
   },
   "devDependencies": {
     "@types/mocha": "^5.2.7",
-    "mocha": "^6.2.1"
+    "mocha": "^6.2.1",
+    "@types/chai": "^4.2.3",
+    "@types/pg": "^7.11.2",
+    "chai": "^4.2.0",
+    "husky": "^3.0.9"
   }
 }

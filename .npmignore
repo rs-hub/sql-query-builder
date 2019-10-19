@@ -10,9 +10,6 @@ bower_components
 .DS_Store
 Thumbs.db
 
-# Ignore built ts files
-dist/**/*
-
 # Logging files
 *.log
 
@@ -20,3 +17,12 @@ error.log
 yarn-error.log
 uploads
 src/example.ts
+
+.gitignore
+data
+src
+tslint.json
+tsconfig.json
+.env
+docker-compose.yml
+tests

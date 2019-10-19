@@ -2,19 +2,26 @@ import Dialects from "../Dialects";
 
 interface ISelect {
     skip(name: number): Select;
+
     limit(count: number): Select;
+
     column(columns: string[]): Select;
+
     orderBy(order: string): Select;
+
     table(table: string): Select;
+
     generate(): { sql: string; values: any[] };
+
     innerJoin(tableAndConditions: { tables: string[]; conditions: string[] }): any;
+
     query(): Promise<any>;
 }
 
 export default class Select extends Dialects implements ISelect {
     private offset: number | undefined;
     private limitCount: number | undefined;
-    private columns: string[] | undefined;
+    private columns: string[] | string;
     private order: string | undefined;
     private readonly conditions: {} | undefined;
     private readonly values: any[] | undefined;
@@ -59,7 +66,7 @@ export default class Select extends Dialects implements ISelect {
     }
 
     public generate() {
-        let sql = `SELECT ${this.columns} FROM ${this.byTable}`;
+        let sql = `SELECT ${this.columns || "*"} FROM ${this.byTable}`;
         if (this.join) {
             sql += ` ${this.join}`;
         }
